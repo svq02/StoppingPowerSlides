@@ -1,0 +1,109 @@
+---
+title       : Calculating Proton Beam Effects For Cancer Therapy
+subtitle    : 
+author      : Seth A. Veitzer
+job         : 
+# io2012 does not support italics or bold text. Reason enough.
+#framework   : html5slides # {io2012, html5slides, shower, dzslides, ...}
+framework   : io2012 # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+--- 
+<!-- Copyright &copy; 2015 Seth A. Veitzer                                  -->
+<!-- Please do not plagarize                                                -->
+
+## Knowing Proton Stopping Powers Enables Effective Cancer Treatment
+
+* Proton beam therapy treats malignant tumors in cases where
+traditional radiation therapy is not possible, e.g. for ocular tumors (eye)
+* Protons will deposit most of their energy in a much smaller volume than
+radiation, minimizing damage to healthy tissue
+* The rate at which protons deposit energy in a target material is called
+*Stopping Power*, measured in using of $MeV \cdot cm^2/g$
+* Proton stopping power depends on both target material properties and 
+on the proton energy
+  - Total stopping power has a peak value (Bragg Peak), where the rate of 
+energy loss is greatest
+  - Most of a proton's energy (>90%) will be deposited at the Bragg Peak
+
+--- &twoColumn
+
+## The Stopping Power App Makes It Easy To Compare Stopping Powers
+
+*** =left
+
+* The Stopping Power WebApp reads in stopping power data for up to six
+different materials at a time over a large range
+of incident proton energies using R
+* The app plots proton stopping powers for different materials when they
+are selected on the side panel
+  - Users can directly compare different materials over a large range of proton 
+energies, measured in $MeV$
+  - Plots can be made on a linear or log-log scale, depending on the energy range
+of interest
+
+*** =right
+
+``` {r echo=FALSE}
+stopping <- read.csv('stopping.csv', sep=' ')
+xlim <- c(0,2); ylim <- c(0,4000)
+
+plot(stopping[,1],stopping[,1], type='n', xlim=xlim, ylim=ylim,
+  xlab='Proton Kinetic Energy (MeV)',
+  ylab='Stopping Power (Mev cm^2/g)', main='Total Stopping Power')
+
+lines(stopping[,1],stopping[,2], lwd=3, col='red')
+lines(stopping[,1],stopping[,6], lwd=3, col='blue')
+legend <- c('Hydrogen', 'Striated Muscle'); legendCols <- c('red', 'blue')
+legend('topright', legend, lty=1, lwd=3, col=legendCols)
+```
+
+--- &twoColumn
+
+## Average Stopping Power Can Be Computed
+
+*** =left
+
+* The Stopping Power WebApp provides a button on the side panel will calculate and display the
+mean value of proton stopping power
+  - This demonstrates reactive output based on the UI input and real-time server calculations
+  - Only stopping powers that are currently being plotted are included in the average
+  - Provides a quick way to estimate the actual stopping power of materials that have
+many different compositions
+
+*** =right
+
+``` {r echo=FALSE}
+stopping <- read.csv('stopping.csv', sep=' ')
+xlim <- c(0,2); ylim <- c(0,4000)
+
+plot(stopping[,1],stopping[,1], type='n', xlim=xlim, ylim=ylim,
+  xlab='Proton Kinetic Energy (MeV)',
+  ylab='Stopping Power (Mev cm^2/g)', main='Total Stopping Power')
+
+lines(stopping[,1],stopping[,2], lwd=3, col='red')
+lines(stopping[,1],stopping[,6], lwd=3, col='blue')
+lines(stopping[,1],(stopping[,2]+stopping[,6])/2., lwd=3, col='black')
+legend <- c('Hydrogen', 'Striated Muscle', 'Mean Stopping Power'); 
+legendCols <- c('red', 'blue','black')
+legend('topright', legend, lty=1, lwd=3, col=legendCols)
+```
+
+---
+
+## Conclusions
+
+* The Stopping Power WebApp can be used to plot and compare proton stopping powers
+for different target materials
+* This tool can aid in the tuning of proton beam energy for cancer therapy, based on the
+types of tissue and the depth of the tumor to be treated
+* Average stopping power can be computed and displayed to model materials that
+are composed of multiple different types of materials
+* The data used in this WebApp was scraped from the NIST website
+http://www.nist.gov/pml/data/star/index.cfm that publishes tables
+of stopping powers for electrons, protons, and helium atoms (alpha particles)
+
+
