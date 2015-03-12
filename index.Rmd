@@ -86,7 +86,9 @@ plot(stopping[,1],stopping[,1], type='n', xlim=xlim, ylim=ylim,
 
 lines(stopping[,1],stopping[,2], lwd=3, col='red')
 lines(stopping[,1],stopping[,6], lwd=3, col='blue')
-lines(stopping[,1],(stopping[,2]+stopping[,6])/2., lwd=3, col='black')
+# Calculate the mean stopping for demonstration purposes.
+meanStopping <- (stopping[,2]+stopping[,6])/2.
+lines(stopping[,1],meanStopping, lwd=3, col='black')
 legend <- c('Hydrogen', 'Striated Muscle', 'Mean Stopping Power'); 
 legendCols <- c('red', 'blue','black')
 legend('topright', legend, lty=1, lwd=3, col=legendCols)
